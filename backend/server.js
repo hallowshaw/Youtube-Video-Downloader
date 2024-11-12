@@ -8,11 +8,16 @@ const PORT = 5000;
 // Path to ffmpeg (adjust if needed)
 const ffmpegPath = './ffmpeg/ffmpeg.exe';
 
-// CORS configuration to allow requests from the frontend domain
+// CORS configuration to allow requests from both production and localhost during development
 const corsOptions = {
-    origin: 'https://youtube-video-downloader-frontend-delta.vercel.app', // Specify the allowed origin
+    origin: [
+        'https://youtube-video-downloader-frontend-delta.vercel.app',  // Production frontend
+        'http://localhost:5173'  // Local development frontend
+    ],
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204 // For older browsers
 };
 
 app.use(cors(corsOptions)); // Use CORS middleware with custom options
