@@ -21,8 +21,9 @@ app.post('/download', (req, res) => {
 
     // Download video or audio
     const command = audioOnly
-        ? `yt-dlp -f ${formatOption} -x --audio-format mp3 --ffmpeg-location ${ffmpegPath} -o ${output} ${url}`
-        : `yt-dlp -f ${formatOption} --merge-output-format mp4 --ffmpeg-location ${ffmpegPath} -o ${output} ${url}`;
+        ? `yt-dlp -f ${formatOption} -x --audio-format mp3 --ffmpeg-location ${ffmpegPath} -o ${output} ${url} --user-agent "Mozilla/5.0" --cookies-from-browser chrome`
+        : `yt-dlp -f ${formatOption} --merge-output-format mp4 --ffmpeg-location ${ffmpegPath} -o ${output} ${url} --user-agent "Mozilla/5.0" --cookies-from-browser chrome`;
+
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
