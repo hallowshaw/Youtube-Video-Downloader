@@ -7,9 +7,9 @@ const PORT = process.env.PORT || 5000;
 
 const ffmpegPath = './ffmpeg/ffmpeg.exe';
 
-// Allow requests from your frontend origins
+// CORS configuration
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://ytd2.netlify.app'], // Add any other necessary origins here
+    origin: ['http://localhost:5173', 'https://ytd2.netlify.app', 'https://youtube-video-downloader-1ne0.onrender.com'], // Ensure the correct origins are here
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
 }));
