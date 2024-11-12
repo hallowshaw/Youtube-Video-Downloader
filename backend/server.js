@@ -5,10 +5,20 @@ const fs = require('fs');
 const app = express();
 const PORT = 5000;
 
+// Path to ffmpeg (adjust if needed)
 const ffmpegPath = './ffmpeg/ffmpeg.exe';
-app.use(cors());
+
+// CORS configuration to allow requests from the frontend domain
+const corsOptions = {
+    origin: 'https://youtube-video-downloader-frontend-delta.vercel.app', // Specify the allowed origin
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+};
+
+app.use(cors(corsOptions)); // Use CORS middleware with custom options
 app.use(express.json());
 
+// Handle POST request to download video or audio
 app.post('/download', (req, res) => {
     const { url, quality, audioOnly } = req.body;
 
@@ -40,6 +50,10 @@ app.post('/download', (req, res) => {
     });
 });
 
+// Handle preflight CORS requests (OPTIONS)
+app.options('*', cors(corsOptions)); // Allow preflight for all routes
+
+// Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
