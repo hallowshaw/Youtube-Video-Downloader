@@ -16,14 +16,14 @@ app.post('/download', (req, res) => {
         return res.status(400).json({ error: 'URL is required' });
     }
 
-    let output = audioOnly ? 'downloaded_audio.mp3' : 'downloaded_video.mp4';
-    let formatOption = audioOnly ? 'bestaudio' : quality === "best" ? "bestvideo+bestaudio" : "worst";
+    const output = audioOnly ? 'downloaded_audio.mp3' : 'downloaded_video.mp4';
+    const formatOption = audioOnly ? 'bestaudio' : quality === "best" ? "bestvideo+bestaudio" : "worst";
+    const cookiesPath = './youtube_cookies.txt'; // Path to your cookies file
 
     // Download video or audio
     const command = audioOnly
-        ? `yt-dlp -f ${formatOption} -x --audio-format mp3 --ffmpeg-location ${ffmpegPath} -o ${output} ${url} --user-agent "Mozilla/5.0" --cookies-from-browser chrome`
-        : `yt-dlp -f ${formatOption} --merge-output-format mp4 --ffmpeg-location ${ffmpegPath} -o ${output} ${url} --user-agent "Mozilla/5.0" --cookies-from-browser chrome`;
-
+        ? `yt-dlp -f ${formatOption} -x --audio-format mp3 --ffmpeg-location ${ffmpegPath} --cookies ${cookiesPath} -o ${output} ${url}`
+        : `yt-dlp -f ${formatOption} --merge-output-format mp4 --ffmpeg-location ${ffmpegPath} --cookies ${cookiesPath} -o ${output} ${url}`;
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
