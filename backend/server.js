@@ -3,12 +3,16 @@ const cors = require('cors');
 const { exec } = require('child_process');
 const fs = require('fs');
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 const ffmpegPath = './ffmpeg/ffmpeg.exe';
 
-// Allow requests from your frontend origin
-app.use(cors({ origin: 'http://localhost:5173' }));
+// Allow requests from your frontend origins
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://ytd2.netlify.app'], // Add any other necessary origins here
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+}));
 
 app.use(express.json());
 
@@ -20,7 +24,7 @@ app.post('/download', (req, res) => {
     }
 
     const output = audioOnly ? 'downloaded_audio.mp3' : 'downloaded_video.mp4';
-    const formatOption = audioOnly ? 'bestaudio' : quality === "best" ? "bestvideo+bestaudio" : "worst";
+    const formatOption = audioOnly ? 'bestaudio' : quality === 'best' ? 'bestvideo+bestaudio' : 'worst';
     const cookiesPath = './youtube_cookies.txt';
 
     const command = audioOnly
@@ -35,9 +39,9 @@ app.post('/download', (req, res) => {
 
         res.download(output, (err) => {
             if (err) {
-                console.error(`Download Error: ${err}`);
+                console.error(`File Download Error: ${err}`);
             }
-            fs.unlinkSync(output);
+            fs.unlinkSync(output); // Clean up the downloaded file after sending it
         });
     });
 });
