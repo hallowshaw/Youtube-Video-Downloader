@@ -6,6 +6,7 @@ const app = express();
 const PORT = 5000;
 
 const ffmpegPath = './ffmpeg/ffmpeg.exe';
+const ytDlpPath = './yt-dlp/yt-dlp.exe';
 app.use(cors());
 app.use(express.json());
 
@@ -21,8 +22,8 @@ app.post('/download', (req, res) => {
 
     // Download video or audio
     const command = audioOnly
-        ? `yt-dlp -f ${formatOption} -x --audio-format mp3 --ffmpeg-location ${ffmpegPath} -o ${output} ${url}`
-        : `yt-dlp -f ${formatOption} --merge-output-format mp4 --ffmpeg-location ${ffmpegPath} -o ${output} ${url}`;
+        ? `"${ytDlpPath}" -f ${formatOption} -x --audio-format mp3 --ffmpeg-location ${ffmpegPath} -o ${output} ${url}`
+        : `"${ytDlpPath}" -f ${formatOption} --merge-output-format mp4 --ffmpeg-location ${ffmpegPath} -o ${output} ${url}`;
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
