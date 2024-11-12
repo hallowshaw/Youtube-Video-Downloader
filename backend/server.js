@@ -6,8 +6,8 @@ const path = require('path');
 const app = express();
 const PORT = 5000;
 
-const ffmpegPath = './ffmpeg/ffmpeg.exe';  // Path to ffmpeg executable
-const ytDlpPath = path.join(__dirname, 'yt-dlp.exe');  // Path to yt-dlp.exe in your backend folder
+const ffmpegPath = './ffmpeg/ffmpeg';  // Path to ffmpeg (remove .exe for Linux)
+const ytDlpPath = path.join(__dirname, 'yt-dlp');  // Path to the Linux yt-dlp binary (no .exe)
 
 app.use(cors());
 app.use(express.json());
