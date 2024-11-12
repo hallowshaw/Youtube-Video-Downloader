@@ -42,13 +42,16 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/download", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url, quality, audioOnly }),
-      });
+      const response = await fetch(
+        "https://youtube-video-downloader-jade-six.vercel.app/download",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ url, quality, audioOnly }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Download failed");
