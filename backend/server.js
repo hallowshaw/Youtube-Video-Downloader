@@ -6,7 +6,10 @@ const app = express();
 const PORT = 5000;
 
 const ffmpegPath = './ffmpeg/ffmpeg.exe';
-app.use(cors());
+
+// Allow requests from your frontend origin
+app.use(cors({ origin: 'http://localhost:5173' }));
+
 app.use(express.json());
 
 app.post('/download', (req, res) => {
@@ -18,9 +21,8 @@ app.post('/download', (req, res) => {
 
     const output = audioOnly ? 'downloaded_audio.mp3' : 'downloaded_video.mp4';
     const formatOption = audioOnly ? 'bestaudio' : quality === "best" ? "bestvideo+bestaudio" : "worst";
-    const cookiesPath = './youtube_cookies.txt'; // Path to your cookies file
+    const cookiesPath = './youtube_cookies.txt';
 
-    // Download video or audio
     const command = audioOnly
         ? `yt-dlp -f ${formatOption} -x --audio-format mp3 --ffmpeg-location ${ffmpegPath} --cookies ${cookiesPath} -o ${output} ${url}`
         : `yt-dlp -f ${formatOption} --merge-output-format mp4 --ffmpeg-location ${ffmpegPath} --cookies ${cookiesPath} -o ${output} ${url}`;
@@ -31,12 +33,11 @@ app.post('/download', (req, res) => {
             return res.status(500).json({ error: 'Failed to download video' });
         }
 
-        // Send the file to the client
         res.download(output, (err) => {
             if (err) {
                 console.error(`Download Error: ${err}`);
             }
-            fs.unlinkSync(output); // Remove file after sending
+            fs.unlinkSync(output);
         });
     });
 });
